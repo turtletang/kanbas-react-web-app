@@ -52,35 +52,26 @@ The Kanas application should include a link to navigate back to the landing page
             <label htmlFor="wd-submission-type">Submission Type</label>
           </td>
           <td>
-            <select id="wd-availability">
+            <select id="wd-submission-type">
               <option value="Online">Online</option>
-              <option value="Onpaper">Onpaper</option>
+              <option value="On Paper">On Paper</option>
             </select>
-          </td>
-        </tr>
-        <br/>
+            <td> <br />
+              <tr>
+                <label>Online Entry Options</label> <br />
+                <input type="checkbox" id="wd-text-entry" />
+                <label htmlFor="wd-text-entry">Text Entry</label><br />
+                <input type="checkbox" id="wd-website-url" />
+                <label htmlFor="wd-website-url">Website URL</label><br />
+                <input type="checkbox" id="wd-media-recordings" />
+                <label htmlFor="wd-media-recordings">Media Recording</label><br />
+                <input type="checkbox" id="wd-student-annotation" />
+                <label htmlFor="wd-student-annotation">Student Annotation</label><br />
+                <input type="checkbox" id="wd-file-upload" />
+                <label htmlFor="wd-file-upload">File Upload</label><br />
+              </tr> </td>
+          </td> </tr> <br />
 
-        <tr>
-          <td align="left" valign="top">
-            <label> Online Entry Options </label> <br/>
-
-            <input type="checkbox" id="wd-text-entry" />
-            <label htmlFor="wd-text-entry"> Text Entry </label> <br/>
-
-            <input type="checkbox" id="wd-website-url" />
-            <label htmlFor="wd-website-url"> Website URL </label> <br/>
-
-            <input type="checkbox" id="wd-media-recording" />
-            <label htmlFor="wd-media-recording"> Media Recording </label> <br/>
-
-            <input type="checkbox" id="wd-student-annotation" />
-            <label htmlFor="wd-student-annotation"> Student Annotation </label> <br/>
-
-            <input type="checkbox" id="wd-file-upload" />
-            <label htmlFor="wd-file-upload"> File Upload </label> <br/>
-          </td>
-        </tr>
-        <br/>
 
         <tr>
           <td align="right" valign="top">
@@ -115,13 +106,18 @@ The Kanas application should include a link to navigate back to the landing page
               <input type="date" id="wd-available-until" value="2024-05-20" />
             </td>
           </tr>
+          <br />
+          
 
+        </tr>
+        <tr>
+          <td colSpan={3} align="right">
+          <hr />
+            <button>Cancel</button> <button>Save</button>
+          </td>
         </tr>      
 
       </table>
-      <hr />
-    
-      <button>Cancel</button> <button>Save</button>
 
     </div>
 );}
