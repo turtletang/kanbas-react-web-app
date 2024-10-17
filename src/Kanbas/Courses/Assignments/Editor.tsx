@@ -1,6 +1,27 @@
+import React from "react";
+import { useParams, Link } from "react-router-dom";
+import { assignments } from "../../Database";
 import { IoIosArrowDown } from "react-icons/io";
 
+interface Assignment {
+  _id: string;
+  title: string;
+  course: string;
+  notAvailableUntil: string;
+  dueDate: string;
+  points: number;
+  description: string;
+}
+
 export default function AssignmentEditor() {
+  const { cid, aid } = useParams<{ cid: string; aid: string }>();
+
+  const assignment = assignments.find((assignment) => assignment.course === cid && assignment._id === aid);
+
+  if (!assignment) {
+    return <div>Assignment not found</div>;
+  }
+
   return (
     <div id="wd-assignments-editor" className="container my-4">
       {/* Assignment Name */}
@@ -8,7 +29,7 @@ export default function AssignmentEditor() {
         <label htmlFor="wd-name" className="form-label">
           Assignment Name
         </label>
-        <input id="wd-name" className="form-control" value="A1" />
+        <input id="wd-name" className="form-control" value={assignment.title} readOnly />
       </div>
 
       {/* Description */}
@@ -34,114 +55,7 @@ export default function AssignmentEditor() {
         </div>
       </div>
 
-      <div className="mb-3 row">
-        {/* Assignment Group */}
-        <label htmlFor="wd-group" className="col-form-label col-4 text-end">
-          Assignment Group
-        </label>
-        <div className="col-8">
-          <select id="wd-group" className="form-control form-select">
-            <option value="ASSIGNMENTS">ASSIGNMENTS</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="mb-3 row">
-        {/* Display Grade as */}
-        <label
-          htmlFor="wd-display-grade-as"
-          className="col-form-label col-4 text-end"
-        >
-          Display Grade as
-        </label>
-        <div className="col-8">
-          <select id="wd-display-grade-as" className="form-control form-select">
-            <option value="Percentage">Percentage</option>
-            <option value="Points">Points</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Submission Type */}
-      <div className="mb-3 row">
-        <label
-          htmlFor="wd-submission-type"
-          className="col-form-label col-4 text-end"
-        >
-          Submission Type
-        </label>
-
-        <div className="col-8 border p-3">
-          <select
-            id="wd-submission-type"
-            className="form-control form-select mb-3"
-          >
-            <option value="Online">Online</option>
-            <option value="On Paper">On Paper</option>
-          </select>
-
-          {/* Online Entry Options */}
-          <label className="form-label mb-3">
-            <strong>Online Entry Options</strong>
-          </label>
-          <div className="form-check mb-3">
-            <input
-              type="checkbox"
-              id="wd-text-entry"
-              className="form-check-input"
-            />
-            <label htmlFor="wd-text-entry" className="form-check-label">
-              Text Entry
-            </label>
-          </div>
-
-          <div className="form-check mb-3">
-            <input
-              type="checkbox"
-              id="wd-website-url"
-              className="form-check-input"
-              checked
-            />
-            <label htmlFor="wd-website-url" className="form-check-label">
-              Website URL
-            </label>
-          </div>
-
-          <div className="form-check mb-3">
-            <input
-              type="checkbox"
-              id="wd-media-recordings"
-              className="form-check-input"
-            />
-            <label htmlFor="wd-media-recordings" className="form-check-label">
-              Media Recording
-            </label>
-          </div>
-
-          <div className="form-check mb-3">
-            <input
-              type="checkbox"
-              id="wd-student-annotation"
-              className="form-check-input"
-            />
-            <label htmlFor="wd-student-annotation" className="form-check-label">
-              Student Annotation
-            </label>
-          </div>
-
-          <div className="form-check mb-3">
-            <input
-              type="checkbox"
-              id="wd-file-upload"
-              className="form-check-input"
-            />
-            <label htmlFor="wd-file-upload" className="form-check-label">
-              File Upload
-            </label>
-          </div>
-        </div>
-      </div>
-
+    
       <div className="row mb-5">
         {/* Assign To */}
         <label htmlFor="wd-assign-to" className="col-form-label col-4 text-end">
@@ -157,14 +71,10 @@ export default function AssignmentEditor() {
               <input
                 id="wd-assign-to"
                 className="form-control"
-                value=""
-                
+                value="" 
               />
               <div className="position-absolute top-50 start-0 translate-middle-y bg-light px-2 ms-3" style={{ borderRadius: '4px', pointerEvents: 'none' }}>
-                  <span>Everyone</span>
-                  <span className="ms-2 text-muted" style={{ cursor: 'pointer', pointerEvents: 'auto' }}>
-                    &times;
-                  </span>
+                  
                 </div>
               </div>
             </div>
@@ -179,7 +89,7 @@ export default function AssignmentEditor() {
                 type="datetime-local"
                 id="wd-due-date"
                 className="form-control"
-                value="2024-05-13T23:59"
+                value={assignment.formattedDueDate}
               />
             </div>
 
@@ -193,7 +103,7 @@ export default function AssignmentEditor() {
                   type="datetime-local"
                   id="wd-available-from"
                   className="form-control"
-                  value="2024-05-06T12:00"
+                  value={assignment.formattedNotAvailableUntil}
                 />
               </div>
               <div className="col-md-6">
@@ -215,8 +125,12 @@ export default function AssignmentEditor() {
       {/* Buttons */}
       <hr />
       <div className="d-flex justify-content-end">
-        <button className="btn btn-secondary me-2">Cancel</button>
-        <button className="btn btn-danger">Save</button>
+      <Link to={`/Kanbas/courses/${cid}/assignments`} className="btn btn-secondary me-2">
+          Cancel
+        </Link>
+        <Link to={`/Kanbas/courses/${cid}/assignments`} className="btn btn-danger">
+          Save
+        </Link>
       </div>
     </div>
   );
