@@ -1,0 +1,46 @@
+#wd-counter-up-click{
+  background-color: green; /* Green background */
+  color: white; /* White text */
+  border: none; /* Remove border */
+  padding: 10px 20px; /* Padding */
+  margin: 5px; /* Margin between buttons */
+  cursor: pointer; /* Pointer cursor on hover */
+  border-radius: 5px; /* Rounded corners */
+}
+
+#wd-counter-down-click{
+  background-color: red; 
+  color: white; 
+  border: none; 
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer; 
+  border-radius: 5px; 
+}
+
+#wd-delete-element-click{
+  background-color: red; 
+  color: white; 
+  border: none; 
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer; 
+  border-radius: 5px; 
+}
+
+#wd-add-element-click {
+  background-color: green; /* Green background */
+  color: white; /* White text */
+  border: none; /* Remove border */
+  padding: 10px 20px; /* Padding */
+  margin: 5px; /* Margin between buttons */
+  cursor: pointer; /* Pointer cursor on hover */
+  border-radius: 5px; /* Rounded corners */
+}
+
+#wd-array-state-variables ul {
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+}
+
+

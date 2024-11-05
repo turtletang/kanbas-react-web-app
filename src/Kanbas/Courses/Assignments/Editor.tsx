@@ -1,7 +1,9 @@
-import React from "react";
-import { useParams, Link } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import { useNavigate, useParams, useSearchParams, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { assignments } from "../../Database";
 import { IoIosArrowDown } from "react-icons/io";
+import { addAssignment, updateAssignment, cancelUpdate } from "./reducer";
 
 interface Assignment {
   _id: string;
@@ -14,13 +16,64 @@ interface Assignment {
 }
 
 export default function AssignmentEditor() {
-  const { cid, aid } = useParams<{ cid: string; aid: string }>();
+  const { cid, aid } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {assignments} = useSelector((state: any) => state.assignmentsReducer);
+  
 
-  const assignment = assignments.find((assignment) => assignment.course === cid && assignment._id === aid);
+  const [title, setTitle] = useState("New Assignment");
+  const [description, setDescription] = useState("New Assignment Description");
+  const [points, setPoints] = useState(0);
+  const [dueDate, setDueDate] = useState("");
+  const [availableFrom, setAvailableFrom] = useState("");
+  const [availableUntil, setAvailableUntil] = useState("");
 
-  if (!assignment) {
-    return <div>Assignment not found</div>;
-  }
+  useEffect(() => {
+    // Find the existing assignment by id if available
+    const existingAssignment = assignments.find(
+      (assignment: Assignment) => assignment.course === cid && assignment._id === aid
+    );
+
+    if (existingAssignment) {
+      // Populate state with existing assignment details for editing
+      setTitle(existingAssignment.title);
+      setDescription(existingAssignment.description);
+      setPoints(existingAssignment.points);
+      setDueDate(existingAssignment.dueDate);
+      setAvailableFrom(existingAssignment.notAvailableUntil);
+      setAvailableUntil(""); // Assuming empty for new assignments
+    }
+  }, [aid, cid, assignments]);
+
+
+  const handleSave = () => {
+    const newAssignment = {
+      _id: aid === 'new' ? new Date().getTime().toString() : aid,
+      title,
+      description,
+      points,
+      dueDate,
+      course: cid!,
+      notAvailableUntil: availableFrom,
+    };
+
+    console.log("New Assignment:", newAssignment); // degub log the new assignment
+    console.log("aid:", aid);
+    if (aid === 'new') {
+      console.log("Dispatching addAssignment"); // debug log the dispatch action
+      dispatch(addAssignment(newAssignment));
+    } else {
+      dispatch(updateAssignment(newAssignment));
+    }
+
+    navigate(`/Kanbas/courses/${cid}/assignments`);
+  };
+
+  const handleCancel = () => {
+    dispatch(cancelUpdate(aid));
+    navigate(`/Kanbas/courses/${cid}/assignments`);
+  };
 
   return (
     <div id="wd-assignments-editor" className="container my-4">
@@ -29,7 +82,8 @@ export default function AssignmentEditor() {
         <label htmlFor="wd-name" className="form-label">
           Assignment Name
         </label>
-        <input id="wd-name" className="form-control" value={assignment.title} readOnly />
+        <input id="wd-name" className="form-control" value={title}
+         onChange={(e) => setTitle(e.target.value)} />
       </div>
 
       {/* Description */}
@@ -39,8 +93,8 @@ export default function AssignmentEditor() {
             id="wd-description"
             rows={13}
             className="form-control flex-grow-1"
-            value={`\n The assignment is available online. \n\n Submit a link to the landing page of your Web application running on Netlify.\n\n The landing page should include the following: \n\n   •  Your full name and section \n   •  Links to each of the lab assignments \n   •  Link to the Kanas application \n   •  Links to all relevant source code repositories \n\n The Kanas application should include a link to navigate back to the landing page.`}
-            readOnly
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </div>
       </div>
@@ -51,7 +105,8 @@ export default function AssignmentEditor() {
           Points
         </label>
         <div className="col-8">
-          <input id="wd-points" className="form-control" value={100} />
+          <input id="wd-points" className="form-control" value={points}
+          onChange={(e) => setPoints(Number(e.target.value))} />
         </div>
       </div>
 
@@ -89,7 +144,8 @@ export default function AssignmentEditor() {
                 type="datetime-local"
                 id="wd-due-date"
                 className="form-control"
-                value={assignment.formattedDueDate}
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
               />
             </div>
 
@@ -103,7 +159,8 @@ export default function AssignmentEditor() {
                   type="datetime-local"
                   id="wd-available-from"
                   className="form-control"
-                  value={assignment.formattedNotAvailableUntil}
+                  value={availableFrom}
+                  onChange={(e) => setAvailableFrom(e.target.value)}
                 />
               </div>
               <div className="col-md-6">
@@ -114,7 +171,8 @@ export default function AssignmentEditor() {
                   type="datetime-local"
                   id="wd-until"
                   className="form-control"
-                  value=""
+                  value={availableUntil}
+                  onChange={(e) => setAvailableUntil(e.target.value)}
                 />
               </div>
             </div>
@@ -125,12 +183,13 @@ export default function AssignmentEditor() {
       {/* Buttons */}
       <hr />
       <div className="d-flex justify-content-end">
-      <Link to={`/Kanbas/courses/${cid}/assignments`} className="btn btn-secondary me-2">
+      <button onClick={handleCancel} className="btn btn-secondary me-2">
           Cancel
-        </Link>
-        <Link to={`/Kanbas/courses/${cid}/assignments`} className="btn btn-danger">
+        </button>
+
+        <button onClick={handleSave} className="btn btn-danger">
           Save
-        </Link>
+        </button>
       </div>
     </div>
   );

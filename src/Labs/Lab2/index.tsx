@@ -12,7 +12,7 @@ import Float from "./Float";
 import GridLayout from "./GridLayout";
 import Flex from "./Flex";
 import ReactIconsSampler from "./ReactIcons";
-
+import React from "react";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import BootstrapGrids from "./BootstrapGrids";

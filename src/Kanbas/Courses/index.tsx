@@ -6,11 +6,11 @@ import { Navigate, Route, Routes, useParams, useLocation } from "react-router";
 import AssignmentEditor from "./Assignments/Editor";
 import PeopleTable from "./People/Table";
 import { FaAlignJustify } from "react-icons/fa";
-import { courses } from "../Database";
-import { Link } from "react-router-dom";
-  
 
-export default function Courses() {
+import React from "react";
+
+
+export default function Courses({ courses }: { courses: any[] }) {
   const { cid } = useParams();
   const course = courses.find((course) => course._id === cid);
   const { pathname } = useLocation();
@@ -24,7 +24,7 @@ export default function Courses() {
       <hr />
       <div className="d-flex">
         <div className="d-none d-md-block">
-          <CoursesNavigation />
+            <CoursesNavigation />
         </div>
         <div className="flex-fill">
           <Routes>
