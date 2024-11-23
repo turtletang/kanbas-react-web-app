@@ -1,17 +1,18 @@
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useSelector } from "react-redux";
-import * as db from "./Database";
+// import * as db from "./Database";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { enrollCourse, unenrollCourse } from "./enrollmentReducer";
+import * as userClient from "./Account/client";
+import * as coursesClient from "./Courses/client";
 
 export default function Dashboard({
   courses,
   course,
   setCourse,
-  addNewCourse,
   deleteCourse,
   updateCourse,
 }: {
@@ -23,13 +24,36 @@ export default function Dashboard({
   updateCourse: () => void;
 }) {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const { enrollments = [] } = useSelector(
-    (state: any) => state.enrollmentReducer
+  const { enrollments = [] } = useSelector((state: any) => state.enrollmentReducer
   ); // Access enrollments from Redux
 
   const [showAllCourses, setShowAllCourses] = useState(false); // Toggle between enrolled and all courses
   const dispatch = useDispatch();
+  const [filteredCourses, setFilteredCourses] = useState<any[]>([]);
   const navigate = useNavigate();
+
+
+  const fetchEnrolledCourses = async () => {
+    try {
+      const enrolledCourses = await userClient.findMyCourses();
+      setFilteredCourses(enrolledCourses);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchEnrolledCourses();
+  }, [currentUser]);
+
+  const addNewCourse = async () => {
+    try {
+      const newCourse = await userClient.createCourse(course);
+      setCourse({ _id: "", name: "", number: "", startDate: "", endDate: "", image: "reactjs.jpg", description: "" });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   // Role checks
   const isFaculty = currentUser?.role === "FACULTY";
@@ -47,10 +71,12 @@ export default function Dashboard({
     );
 
   // Enroll or Unenroll in a course
-  const handleEnroll = (courseId: string) => {
+  const handleEnroll = async (courseId: string) => {
     if (isEnrolled(courseId)) {
+      await coursesClient.unenroll(courseId, currentUser._id);
       dispatch(unenrollCourse({ userId: currentUser._id, courseId }));
     } else {
+      await coursesClient.enroll(courseId, currentUser._id);
       dispatch(enrollCourse({ userId: currentUser._id, courseId }));
     }
   };

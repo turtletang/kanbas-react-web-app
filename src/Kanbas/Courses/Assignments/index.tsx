@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import AssignmentsControls from "./AssignmentsControls";
@@ -7,8 +7,11 @@ import { BsGripVertical } from "react-icons/bs";
 import { MdArrowDropDown } from "react-icons/md";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import HeadAssignButton from "./HeadAssignButton";
-import { updateAssignment, deleteAssignment } from "./reducer";
+import { setAssignments, updateAssignment, deleteAssignment } from "./reducer";
 import EachAssignmentControl from "./EachAssignmentControl";
+
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
 
 export default function Assignments() {
   const { cid } = useParams();
@@ -16,13 +19,26 @@ export default function Assignments() {
   const { assignments } = useSelector((state: any) => state.assignmentsReducer);
 
   const [assignmentToDelete, setAssignmentToDelete] = useState("");
-  const confirmDeleteAssignment = () => {
+  const confirmDeleteAssignment = async () => {
+    await assignmentsClient.deleteAssignment(assignmentToDelete);
     dispatch(deleteAssignment(assignmentToDelete));
     setAssignmentToDelete("");
   };
 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const isFaculty = currentUser?.role === "FACULTY";
+
+  const fetchAssignments = async () => {
+    try {
+      const assignments = await coursesClient.findAssignmentsForCourse(cid as string);
+      dispatch(setAssignments(assignments));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
 
   return (
     <div>
@@ -45,7 +61,7 @@ export default function Assignments() {
 
           <ul className="wd-assignments list-group rounded-0">
             {assignments
-              .filter((assignment: any) => assignment.course === cid)
+              //.filter((assignment: any) => assignment.course === cid)
               .map((assignment: any) => (
                 <li
                   key={assignment._id}

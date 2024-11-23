@@ -5,6 +5,9 @@ import { assignments } from "../../Database";
 import { IoIosArrowDown } from "react-icons/io";
 import { addAssignment, updateAssignment, cancelUpdate } from "./reducer";
 
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
+
 interface Assignment {
   _id: string;
   title: string;
@@ -29,6 +32,24 @@ export default function AssignmentEditor() {
   const [availableFrom, setAvailableFrom] = useState("");
   const [availableUntil, setAvailableUntil] = useState("");
 
+  const createAssignmentForCourse = async () => {
+    if (!cid) return;
+    const newAssignment = {
+      title,
+      description,
+      points,
+      dueDate,
+      availableFrom,
+      availableUntil,
+    };
+    const assignment = await coursesClient.createAssignmentForCourse(cid, newAssignment);
+    dispatch(addAssignment(assignment));
+  };
+  const updateAssignmentHandler = async (assignment: any) => {
+    await assignmentsClient.updateAssignment(assignment);
+    dispatch(updateAssignment(assignment));
+  };
+
   useEffect(() => {
     // Find the existing assignment by id if available
     const existingAssignment = assignments.find(
@@ -47,7 +68,7 @@ export default function AssignmentEditor() {
   }, [aid, cid, assignments]);
 
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const newAssignment = {
       _id: aid === 'new' ? new Date().getTime().toString() : aid,
       title,
@@ -62,9 +83,9 @@ export default function AssignmentEditor() {
     console.log("aid:", aid);
     if (aid === 'new') {
       console.log("Dispatching addAssignment"); // debug log the dispatch action
-      dispatch(addAssignment(newAssignment));
+      await createAssignmentForCourse();
     } else {
-      dispatch(updateAssignment(newAssignment));
+      await updateAssignmentHandler(newAssignment);
     }
 
     navigate(`/Kanbas/courses/${cid}/assignments`);
