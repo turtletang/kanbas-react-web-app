@@ -72,7 +72,26 @@ export default function TOC() {
           href="https://github.com/turtletang/kanbas-react-web-app"
           className="nav-link"
         >
-          My GitHub
+          My GitHub kanbas-react-web-app
+        </a>{" "}
+      </li>
+
+      <li className="nav-item">
+        <a
+          id="wd-k"
+          href="https://github.com/turtletang/kanbas-node-server-app"
+          className="nav-link"
+        >
+          My GitHub kanbas-node-server-app
+        </a>{" "}
+      </li>
+      <li className="nav-item">
+        <a
+          id="wd-k"
+          href="https://kanbas-node-server-app-0hei.onrender.com"
+          className="nav-link"
+        >
+          Render Deployment
         </a>{" "}
       </li>
     </ul>
