@@ -1,4 +1,5 @@
 import axios from "axios";
+import { error } from "console";
 const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 const COURSES_API = `${REMOTE_SERVER}/api/courses`;
 const ENROLLMENTS_API = `${REMOTE_SERVER}/api/enroll`;
@@ -36,15 +37,34 @@ export const findAssignmentsForCourse = async (courseId: string) => {
   const response = await axios.get(`${COURSES_API}/${courseId}/assignments`);
   return response.data;
 };
-export const createAssignmentForCourse = async (courseId: string, assignment: any) => {
-  const response = await axios.post(`${COURSES_API}/${courseId}/assignments`, assignment);
+export const createAssignmentForCourse = async (
+  courseId: string,
+  assignment: any
+) => {
+  const response = await axios.post(
+    `${COURSES_API}/${courseId}/assignments`,
+    assignment
+  );
   return response.data;
 };
+
+// enroll and unenroll
 export const enroll = async (courseID: string, userID: string) => {
-  const response = await axios.put(`${ENROLLMENTS_API}/${courseID}/${userID}`);
-  return response.data;
-}
+  console.log("reach courses client enroll function");
+  try {
+    const response = await axios.put(
+      `${ENROLLMENTS_API}/${courseID}/${userID}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("error enroll the course");
+    throw error;
+  }
+};
+
 export const unenroll = async (courseID: string, userID: string) => {
-  const response = await axios.delete(`${ENROLLMENTS_API}/${courseID}/${userID}`);
+  const response = await axios.delete(
+    `${ENROLLMENTS_API}/${courseID}/${userID}`
+  );
   return response.data;
-}
+};

@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 // import * as db from "./Database";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { enrollCourse, unenrollCourse } from "./enrollmentReducer";
+import { enrollCourse, unenrollCourse, setEnrollments } from "./enrollmentReducer";
 import * as userClient from "./Account/client";
 import * as coursesClient from "./Courses/client";
 
@@ -13,6 +13,7 @@ export default function Dashboard({
   courses,
   course,
   setCourse,
+  //addNewCourse,
   deleteCourse,
   updateCourse,
 }: {
@@ -24,19 +25,37 @@ export default function Dashboard({
   updateCourse: () => void;
 }) {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const { enrollments = [] } = useSelector((state: any) => state.enrollmentReducer
-  ); // Access enrollments from Redux
+  const { enrollments = [] } = useSelector((state: any) => state.enrollmentReducer); // Access enrollments from Redux
+  //const [enrollments, setEnrollments] = useState<any[]>([]); // Define enrollments state
 
   const [showAllCourses, setShowAllCourses] = useState(false); // Toggle between enrolled and all courses
   const dispatch = useDispatch();
   const [filteredCourses, setFilteredCourses] = useState<any[]>([]);
   const navigate = useNavigate();
+  
 
 
   const fetchEnrolledCourses = async () => {
+    console.log("Fetching enrolled courses");
     try {
       const enrolledCourses = await userClient.findMyCourses();
-      setFilteredCourses(enrolledCourses);
+      console.log("Enrolled courses fetched:", enrolledCourses);
+      const updatedEnrollments = enrolledCourses.map((course: any) => ({
+        _id: course._id,
+        user: currentUser._id,
+        course: course._id,
+      }));
+      
+
+      // Update Redux state with the new enrollments
+      dispatch({ type: "enrollment/setEnrollments", payload: updatedEnrollments });
+
+      const updatedCourses = enrolledCourses.map((course: any) => ({
+        ...course,
+        isEnrolled: true,
+      }));
+      setFilteredCourses(updatedCourses);
+
     } catch (error) {
       console.error(error);
     }
@@ -45,6 +64,7 @@ export default function Dashboard({
     fetchEnrolledCourses();
   }, [currentUser]);
 
+  
   const addNewCourse = async () => {
     try {
       const newCourse = await userClient.createCourse(course);
@@ -53,7 +73,7 @@ export default function Dashboard({
       console.error(error);
     }
   };
-
+  
 
   // Role checks
   const isFaculty = currentUser?.role === "FACULTY";
@@ -64,20 +84,30 @@ export default function Dashboard({
     setShowAllCourses(!showAllCourses);
   };
 
-  const isEnrolled = (courseId: string) =>
-    enrollments.some(
+  const isEnrolled = (courseId: string) =>{
+    const enrolled = enrollments.some(
       (enrollment: { user: string; course: string }) =>
         enrollment.course === courseId && enrollment.user === currentUser._id
     );
+    console.log(`isEnrolled for course ${courseId}: ${enrolled}`);
+    return enrolled;
+  };
 
   // Enroll or Unenroll in a course
   const handleEnroll = async (courseId: string) => {
+    console.log(`handleEnroll triggered for courseId: ${courseId}`);
     if (isEnrolled(courseId)) {
       await coursesClient.unenroll(courseId, currentUser._id);
       dispatch(unenrollCourse({ userId: currentUser._id, courseId }));
+      fetchEnrolledCourses();
+      console.log("Unenrolled");
     } else {
+      console.log("User is not enrolled, attempting to enroll");
       await coursesClient.enroll(courseId, currentUser._id);
+      console.log("Enroll API call successful");
       dispatch(enrollCourse({ userId: currentUser._id, courseId }));
+      console.log("Dispatched enroll action");
+      fetchEnrolledCourses();
     }
   };
 
@@ -98,9 +128,9 @@ export default function Dashboard({
           <h5>
             New Course
             <button
-              className="btn btn-primary float-end"
-              id="wd-add-new-course-click"
+              className="btn btn-primary float-end"   
               onClick={addNewCourse}
+              id="wd-add-new-course-click"
             >
               {" "}
               Add{" "}
@@ -144,7 +174,9 @@ export default function Dashboard({
           {courses
             .filter((course) => isFaculty || showAllCourses || isEnrolled(course._id))
 
-            .map((course) => (
+            .map((course) => {
+              console.log("Rendering course card for:", course._id);
+              return (
               <div key={course._id} className="col" style={{ width: "300px" }}>
                 <div className="card rounded-3 overflow-hidden">
                   
@@ -203,6 +235,7 @@ export default function Dashboard({
                               : "btn-success"
                           } float-end me-2`}
                           onClick={(event) => {
+                            console.log("Enroll/Unenroll button clicked for course:", course._id);
                             event.preventDefault();
                             handleEnroll(course._id);
                           }}
@@ -220,7 +253,7 @@ export default function Dashboard({
                 
                 </div>
               </div>
-            ))}
+            )})}
           
         </div>
       </div>
