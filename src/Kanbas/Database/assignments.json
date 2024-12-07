@@ -1,6 +1,6 @@
 [
   {
-    "_id": "A101",
+    "a_id": "A101",
     "title": "Propulsion Assignment",
     "course": "RS101",
     "module": "Introduction to Rocket Propulsion",
@@ -12,7 +12,7 @@
     "description": "The assignment is available online\n\nSubmit a link to the landing page of your Web application running on Netlify.\n\nThe landing page should include the following:\n\n • Your full name and section\n • Links to each of the lab assignments\n • Link to the Kanbas application\n • Links to all relevant source code repositories\n\nThe Kanas application should include a link to navigate back to the landing page."
   },
   {
-    "_id": "A102",
+    "a_id": "A102",
     "title": "Combustion Analysis",
     "course": "RS101",
     "module": "Fuel and Combustion",
@@ -24,7 +24,7 @@
     "description": "The assignment is available online\n\nSubmit a link to the landing page of your Web application running on Netlify.\n\nThe landing page should include the following:\n\n • Your full name and section\n • Links to each of the lab assignments\n • Link to the Kanbas application\n • Links to all relevant source code repositories\n\nThe Kanas application should include a link to navigate back to the landing page."
   },
   {
-    "_id": "A103",
+    "a_id": "A103",
     "title": "Nozzle Design Project",
     "course": "RS101",
     "module": "Nozzle Design",
@@ -36,7 +36,7 @@
     "description": "The assignment is available online\n\nSubmit a link to the landing page of your Web application running on Netlify.\n\nThe landing page should include the following:\n\n • Your full name and section\n • Links to each of the lab assignments\n • Link to the Kanbas application\n • Links to all relevant source code repositories\n\nThe Kanas application should include a link to navigate back to the landing page."
   },
   {
-    "_id": "A201",
+    "a_id": "A201",
     "title": "Aerodynamics Quiz",
     "course": "RS102",
     "module": "Fundamentals of Aerodynamics",
@@ -48,7 +48,7 @@
     "description": "The assignment is available online\n\nSubmit a link to the landing page of your Web application running on Netlify.\n\nThe landing page should include the following:\n\n • Your full name and section\n • Links to each of the lab assignments\n • Link to the Kanbas application\n • Links to all relevant source code repositories\n\nThe Kanas application should include a link to navigate back to the landing page."
   },
   {
-    "_id": "A202",
+    "a_id": "A202",
     "title": "Flow Analysis",
     "course": "RS102",
     "module": "Subsonic and Supersonic Flow",
@@ -60,7 +60,7 @@
     "description": "The assignment is available online\n\nSubmit a link to the landing page of your Web application running on Netlify.\n\nThe landing page should include the following:\n\n • Your full name and section\n • Links to each of the lab assignments\n • Link to the Kanbas application\n • Links to all relevant source code repositories\n\nThe Kanas application should include a link to navigate back to the landing page."
   },
   {
-    "_id": "A203",
+    "a_id": "A203",
     "title": "Heating Analysis",
     "course": "RS102",
     "module": "Aerodynamic Heating",
@@ -72,7 +72,7 @@
     "description": "The assignment is available online\n\nSubmit a link to the landing page of your Web application running on Netlify.\n\nThe landing page should include the following:\n\n • Your full name and section\n • Links to each of the lab assignments\n • Link to the Kanbas application\n • Links to all relevant source code repositories\n\nThe Kanas application should include a link to navigate back to the landing page."
   },
   {
-    "_id": "A301",
+    "a_id": "A301",
     "title": "Structural Design Task",
     "course": "RS103",
     "module": "Spacecraft Structural Design",
@@ -84,7 +84,7 @@
     "description": "The assignment is available online\n\nSubmit a link to the landing page of your Web application running on Netlify.\n\nThe landing page should include the following:\n\n • Your full name and section\n • Links to each of the lab assignments\n • Link to the Kanbas application\n • Links to all relevant source code repositories\n\nThe Kanas application should include a link to navigate back to the landing page."
   },
   {
-    "_id": "A302",
+    "a_id": "A302",
     "title": "Orbital Calculations",
     "course": "RS103",
     "module": "Orbital Mechanics",
@@ -96,7 +96,7 @@
     "description": "The assignment is available online\n\nSubmit a link to the landing page of your Web application running on Netlify.\n\nThe landing page should include the following:\n\n • Your full name and section\n • Links to each of the lab assignments\n • Link to the Kanbas application\n • Links to all relevant source code repositories\n\nThe Kanas application should include a link to navigate back to the landing page."
   },
   {
-    "_id": "A303",
+    "a_id": "A303",
     "title": "Systems Engineering Exam",
     "course": "RS103",
     "module": "Spacecraft Systems Engineering",

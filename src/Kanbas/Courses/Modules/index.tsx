@@ -41,13 +41,19 @@ export default function Modules() {
   
 
   const fetchModules = async () => {
-    const modules = await coursesClient.findModulesForCourse(cid as string);
-    dispatch(setModules(modules));
+    try {
+      console.log("Fetching modules for course:", cid);
+      const modules = await coursesClient.findModulesForCourse(cid as string);
+      console.log("Modules fetched:", modules);
+      dispatch(setModules(modules));
+    } catch (error) {
+      console.error("Error fetching modules:", error);
+    }
   };
+  
   useEffect(() => {
     fetchModules();
   }, []);
-  
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const isFaculty = currentUser?.role === "FACULTY";
 
